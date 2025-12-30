@@ -1,0 +1,19 @@
+{
+  "apiVersion": "v1",
+  "kind": "PersistentVolumeClaim",
+  "metadata": {
+    "name": "jmix-petclinic-db-pvclaim"
+  },
+  "spec": {
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "resources": {
+      "requests": {
+        "storage": "5Gi"
+      }
+    }
+  }
+}
+
+ 

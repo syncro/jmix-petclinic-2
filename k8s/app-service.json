@@ -1,0 +1,23 @@
+{
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+    "name": "jmix-petclinic-app-service"
+  },
+  "spec": {
+    "type": "NodePort",
+    "ports": [
+      {
+        "port": 8080,
+        "name": "jmix-petclinic-app-app"
+      },
+      {
+        "port": 5701,
+        "name": "jmix-petclinic-app-hazelcast"
+      }
+    ],
+    "selector": {
+      "app": "jmix-petclinic-app"
+    }
+  }
+}

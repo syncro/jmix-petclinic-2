@@ -1,0 +1,21 @@
+{
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+    "name": "jmix-petclinic-db-service"
+  },
+  "spec": {
+    "type": "NodePort",
+    "ports": [
+      {
+        "port": 5432,
+        "name": "jmix-petclinic-db-db"
+      }
+    ],
+    "selector": {
+      "app": "jmix-petclinic-db"
+    }
+  }
+} 
+
+ 

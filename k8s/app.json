@@ -1,0 +1,95 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "jmix-petclinic-app"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "jmix-petclinic-app"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "jmix-petclinic-app"
+        }
+      },
+      "spec": {
+        "imagePullSecrets": [
+          {"name": "registrysecret"}
+        ],
+        "containers": [
+          {
+            "image": "ghcr.io/syncro/jmix-petclinic-2:latest",
+            "imagePullPolicy": "Always",
+            "name": "jmix-petclinic-app",
+            "env": [
+              {
+                "name": "DB_NAME",
+                "valueFrom": {
+                  "configMapKeyRef": {
+                    "name": "jmix-petclinic-db-config",
+                    "key": "db_name"
+                  }
+                }
+              },
+              {
+                "name": "DB_USER",
+                "valueFrom": {
+                  "configMapKeyRef": {
+                    "name": "jmix-petclinic-db-config",
+                    "key": "db_user"
+                  }
+                }
+              },
+              {
+                "name": "DB_PASSWORD",
+                "valueFrom": {
+                  "configMapKeyRef": {
+                    "name": "jmix-petclinic-db-config",
+                    "key": "db_password"
+                  }
+                }
+              },
+              {
+                "name": "DB_HOST",
+                "value": "jmix-petclinic-db-service"
+              },
+              {
+                "name": "DB_PORT",
+                "valueFrom": {
+                  "configMapKeyRef": {
+                    "name": "jmix-petclinic-db-config",
+                    "key": "db_port"
+                  }
+                }
+              },
+              {
+                "name": "SPRING_PROFILES_ACTIVE",
+                "value": "k8s"
+              }
+            ],
+            "lifecycle": {
+              "preStop": {
+                "exec": {
+                  "command": ["sh", "-c", "sleep 10"]
+                }
+              }
+            },
+            "ports": [
+              {
+                "containerPort": 8080
+              },
+              {
+                "containerPort": 5701
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+} 

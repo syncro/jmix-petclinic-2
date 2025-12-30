@@ -47,6 +47,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     runtimeOnly 'org.hsqldb:hsqldb'
+    implementation 'com.hazelcast:hazelcast'
+    implementation 'com.postgres:postgresql'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -80,4 +82,8 @@ bootBuildImage {
     if (rootProject.hasProperty('jmixDockerTag')) {
         imageName = rootProject['jmixDockerTag']
     }
+}
+
+bootRun {
+    args = ["--spring.profiles.active=dev"]
 }

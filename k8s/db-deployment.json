@@ -1,0 +1,79 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "jmix-petclinic-db"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "jmix-petclinic-db"
+      }
+    },
+    "strategy": {},
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "jmix-petclinic-db"
+        }
+      },
+      "spec": {
+        "volumes": [
+          {
+            "name": "jmix-petclinic-db-storage",
+            "persistentVolumeClaim": {
+              "claimName": "jmix-petclinic-db-pvclaim"
+            }
+          }
+        ],
+        "containers": [
+          {
+            "image": "postgres:17",
+            "name": "jmix-petclinic-db",
+            "env": [
+              {
+                "name": "POSTGRES_USER",
+                "valueFrom": {
+                  "configMapKeyRef": {
+                    "name": "jmix-petclinic-db-config",
+                    "key": "db_user"
+                  }
+                }
+              },
+              {
+                "name": "POSTGRES_PASSWORD",
+                "valueFrom": {
+                  "configMapKeyRef": {
+                    "name": "jmix-petclinic-db-config",
+                    "key": "db_password"
+                  }
+                }
+              },
+              {
+                "name": "PGDATA",
+                "value": "/var/lib/postgresql/data/pgdata"
+              },
+              {
+                "name": "POSTGRES_DB",
+                "value": "jmix-petclinic"
+              }
+            ],
+            "ports": [
+              {
+                "containerPort": 5432,
+                "name": "petclinic-db"
+              }
+            ],
+            "volumeMounts": [
+              {
+                "name": "jmix-petclinic-db-storage",
+                "mountPath": "/var/lib/postgresql/data"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+} 
