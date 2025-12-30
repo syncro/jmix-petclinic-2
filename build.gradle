@@ -82,8 +82,10 @@ bootBuildImage {
     if (rootProject.hasProperty('jmixDockerTag')) {
         imageName = rootProject['jmixDockerTag']
     }
+    environment["BPE_APPEND_JAVA_TOOL_OPTIONS"] = " -Dspring.profiles.active=prod"
 }
 
 bootRun {
     args = ["--spring.profiles.active=dev"]
 }
+
