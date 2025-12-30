@@ -59,6 +59,36 @@ jobs:
          PREMIUM_REPO_USER: ${{ secrets.PREMIUM_REPO_USER }} 
          PREMIUM_REPO_PASS: ${{ secrets.PREMIUM_REPO_PASS }} 
         run: ./gradlew -Pvaadin.productionMode=true -Dorg.gradle.jvmargs='-Xms8g -Xmx24g' bootBuildImage -x test --imageName=ghcr.io/syncro/jmix-petclinic-2 --publishImage
+
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+          kubectl version --client
+      
+      - name: Configure Kubernetes
+        run: |
+          mkdir -p ~/.kube
+          # Remove any newlines from the secret
+          echo "$KUBE_CONFIG" | tr -d '\n' | base64 -d > ~/.kube/config
+          
+          # Verify the config file was created properly
+          ls -la ~/.kube/
+          echo "=== Config file content ==="
+          cat ~/.kube/config
+          echo "=== End config file ==="
+          
+          # Set proper permissions
+          chmod 600 ~/.kube/config
+          
+          # Test basic config reading
+          kubectl config view
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
+
+      - name: Verify cluster access
+        run: |
+          kubectl cluster-info
   
       - name: Deploy to the k8s cluster
         run: |
