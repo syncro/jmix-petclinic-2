@@ -59,3 +59,7 @@ jobs:
          PREMIUM_REPO_USER: ${{ secrets.PREMIUM_REPO_USER }} 
          PREMIUM_REPO_PASS: ${{ secrets.PREMIUM_REPO_PASS }} 
         run: ./gradlew -Pvaadin.productionMode=true -Dorg.gradle.jvmargs='-Xms8g -Xmx24g' bootBuildImage -x test --imageName=ghcr.io/syncro/jmix-petclinic-2 --publishImage
+  
+      - name: Deploy to the k8s cluster
+        run: |
+          kubectl delete -f ./k8s/ --ignore-not-found=true ; kubectl apply -f ./k8s/ -n default
