@@ -48,7 +48,7 @@ dependencies {
 
     runtimeOnly 'org.hsqldb:hsqldb'
     implementation 'com.hazelcast:hazelcast'
-    implementation 'com.postgres:postgresql'
+    implementation 'orc.postgresql:postgresql'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
